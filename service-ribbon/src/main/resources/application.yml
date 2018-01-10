@@ -1,0 +1,43 @@
+server:
+  port: 8782
+spring:
+  profiles:
+    active: dev
+  application:
+    name: service-ribbon
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+      lease-expiration-duration-in-seconds: 15
+      lease-renewal-interval-in-seconds: 5
+jwt:
+  header: Authorization
+  expiration: 604800
+  tokenHead: "Bearer "
+---
+spring:
+  profiles: dev
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+---
+spring:
+  profiles: test
+eureka:
+  client:
+    service-url:
+      defaultZone: http://122.112.212.252:8761/eureka
+
+#ribbon.ConnectTimeout=10
+#ribbon.ReadTimeout=10
+
+#隔离策略，默认是Thread, 可选THREAD｜SEMAPHORE
+#hystrix.command.default.execution.isolation.strategy=SEMAPHORE
+#hystrix.command.default.execution.isolation.semaphore.timeoutInMilliseconds=10000
+#hystrix.command.default.execution.timeout.enabled=false
+#zuul.host.socket-timeout-millis=60000
+#zuul.host.connect-timeout-millis=10000
+#hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=60000

@@ -1,0 +1,4 @@
+jwt:
+  header: Authorization
+  expiration: 604800
+  tokenHead: "Bearer "

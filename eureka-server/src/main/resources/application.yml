@@ -1,0 +1,70 @@
+spring:
+     profiles:
+        active: peer1
+eureka:
+  server:
+    response-cache-update-interval-ms: 3000
+    #eureka server刷新readCacheMap的时间，注意，client读取的是readCacheMap，这个时间决定了多久会把readWriteCacheMap的缓存更新到readCacheMap上
+    #默认30s
+    eviction-interval-timer-in-ms: 3000
+    #启用主动失效，并且每次主动失效检测间隔为3s
+#    enable-self-preservation: false
+  client:
+#    register-with-eureka: false
+#    #配置服务注册中心是否以自己为客户端进行注册(配置false)
+    fetch-registry: false
+    #是否取得注册信息(配置false)
+---
+spring:
+  profiles: eureka1
+  application:
+    name: Eureka-Server
+eureka:
+  instance:
+    hostname: eureka1
+    #配置主机名
+  client:
+    service-url:
+      defaultZone: http://eureka2:8761/eureka/
+      #defaultZone 一定要按照标准写法，因为service-url的数据类型是Map 这算是个小坑需要注意
+server:
+  port: 8760
+---
+spring:
+  profiles: eureka2
+  application:
+    name: Eureka-Server
+eureka:
+  instance:
+    hostname: eureka2
+  client:
+    service-url:
+      defaultZone: http://eureka1:8760/eureka/
+server:
+  port: 8761
+---
+spring:
+  profiles: peer1
+  application:
+    name: Eureka-Server
+eureka:
+  instance:
+    hostname: peer1
+  client:
+    service-url:
+      defaultZone: http://peer2:8761/eureka/
+server:
+  port: 8760
+---
+spring:
+  profiles: peer2
+  application:
+    name: Eureka-Server
+eureka:
+  instance:
+    hostname: peer2
+  client:
+    service-url:
+      defaultZone: http://peer1:8760/eureka/
+server:
+  port: 8761

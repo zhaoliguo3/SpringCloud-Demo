@@ -1,0 +1,67 @@
+# Server configuration
+server:
+  port: 8091
+  contextPath:
+  tomcat:
+    max-threads: 1000
+    max-connections: 1000
+# Spring configuration
+spring:
+  profiles:
+      active: dev
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+#  datasource:
+#    url: jdbc:mysql://192.168.0.119:8635/workflow?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+#    username: workflow
+#    password: Xzl-workflow-12171207!
+  application:
+    name: auth-server
+
+eureka:
+  instance:
+      lease-expiration-duration-in-seconds: 15
+      lease-renewal-interval-in-seconds: 5
+# JWT
+jwt:
+  header: Authorization
+  expiration: 6604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
+      register: "auth/register"
+
+# Logging configuration
+#logging:
+#  level:
+#    org.springframework:
+#      data: DEBUG
+#      security: DEBUG
+
+#spring.boot.admin.url: http://localhost:8080
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_server?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 111
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://192.168.0.119:8635/workflow?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: workflow
+    password: Xzl-workflow-12171207!
+eureka:
+  client:
+    service-url:
+      defaultZone: http://122.112.239.76:8760/eureka/

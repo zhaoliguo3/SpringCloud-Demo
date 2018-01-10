@@ -1,0 +1,66 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8769
+  tomcat:
+    max-threads: 1000
+    max-connections: 1000
+
+spring:
+  application:
+    name: service-zuul
+
+zuul:
+#  host:
+#    connect-timeout-millis: 10000
+#    socket-timeout-millis: 60000
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: service-hi
+    api-b:
+      path: /api-b/**
+      serviceId: service-ribbon
+    auth-server:
+      path: /auth-server/**
+      serviceId: auth-server
+    workflow-service:
+      path: /workflow-service/**
+      serviceId: WORKFLOW-SERVICE
+  sensitive-headers:
+  semaphore:
+    max-semaphores: 1000
+
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 60000
+#        isolation:
+#          strategy: SEMAPHORE
+#          timeoutInMilliseconds: 50000
+
+
+
+#隔离策略，默认是Thread, 可选THREAD｜SEMAPHORE
+#hystrix.command.default.execution.isolation.strategy=SEMAPHORE
+#hystrix.command.default.execution.isolation.semaphore.timeoutInMilliseconds=3000
+##如果并发数达到该设置值，请求会被拒绝和抛出异常并且fallback不会被调用。默认10
+##应用于Hystrix的THREAD和SEMAPHORE策略
+#hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests=10
+##强制打开熔断器，如果打开这个开关，那么拒绝所有request
+#hystrix.command.default.circuitBreaker.forceOpen=false
+
+#hystrix.command.default.execution.timeout.enabled=false
